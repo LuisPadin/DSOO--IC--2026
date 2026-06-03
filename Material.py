@@ -1,14 +1,12 @@
 class Material:
-    # Contador para materiales
     contador_material = 0
 
     def __init__(self, titulo):
         Material.contador_material = Material.contador_material + 1
-        self.id_material = "MAT" + str(Material.contador_material)
-        self.titulo = titulo
+        self.id_material = str(Material.contador_material)
+        self.titulo = title = titulo
         self.disponible = True
 
-# funciones clase Material 
     def prestar(self):
         if self.disponible:
             self.disponible = False
@@ -29,6 +27,7 @@ class Libro(Material):
     def __init__(self, titulo, autor):
         super().__init__(titulo)
         self.autor = autor
+        
     def __str__(self):
         return super().__str__() + " | Tipo: Libro | Autor: " + self.autor
 
@@ -37,7 +36,7 @@ class Revista(Material):
         super().__init__(titulo)
         self.numero = numero
         
-
     def __str__(self):
         return super().__str__() + " | Tipo: Revista | N°: " + str(self.numero)
+
 
