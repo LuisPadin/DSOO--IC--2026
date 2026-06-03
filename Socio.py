@@ -3,7 +3,7 @@ class Socio:
 
     def __init__(self, nombre):
         Socio.contador_socio = Socio.contador_socio + 1
-        self.id_socio = "Socio" + str(Socio.contador_socio)
+        self.id_socio = str(Socio.contador_socio)
         self.nombre = nombre
         self.habilitado = True
 
@@ -12,5 +12,6 @@ class Socio:
             estado = "Habilitado"
         else:
             estado = "Suspendido"
-        return "ID: " + self.id_socio + " | Nombre: " + self.nombre + " | Estado: " + estado
+        return "ID Socio: " + self.id_socio + " | Nombre: " + self.nombre + " | Estado: " + estado
+
 
