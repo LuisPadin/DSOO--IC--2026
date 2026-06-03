@@ -5,7 +5,7 @@ from Socio import Socio
 def menu_principal():
     biblioteca = Biblioteca()
     
-    # Datos de prueba iniciales (Se generarán automáticamente con IDs: "1", "2" y "1")
+    # Datos de prueba 
     biblioteca.agregar_material(Libro("El Aleph", "Jorge Luis Borges"))
     biblioteca.agregar_material(Revista("National Geographic", 520))
     biblioteca.agregar_socio(Socio("Juan Pérez"))
