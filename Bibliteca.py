@@ -1,3 +1,5 @@
+from Prestamo import Prestamo  
+
 class Biblioteca:
     def __init__(self):
         self.inventario = []
@@ -75,4 +77,5 @@ class Biblioteca:
             print("No hay préstamos activos.")
         for p in self.prestamos:
             print(p)
+
 
