@@ -7,10 +7,6 @@ class Biblioteca:
         self.prestamos = []     
 
     def agregar_material(self, material):
-        for item in self.inventario:
-            if item.titulo == material.titulo:
-                item.stock = item.stock + 1
-                return False
         self.inventario.append(material)
         return True
 
@@ -59,15 +55,12 @@ class Biblioteca:
                 socio_encontrado = s
                 break
 
-        if socio_encontrado == None:
-            return False
-
-        if socio_encontrado.habilitado == False:
+        if socio_encontrado == None or socio_encontrado.habilitado == False:
             return False
 
         for item in self.inventario:
             if item.id_material == id_material:
-                if item.stock > 0:
+                if item.disponible:
                     nuevo_prestamo = Prestamo(socio_encontrado, item)
                     self.prestamos.append(nuevo_prestamo)
                     return True
