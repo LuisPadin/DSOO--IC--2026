@@ -1,87 +1,216 @@
 from Biblioteca import Biblioteca
 from Material import Libro, Revista      
 from Socio import Socio
+from Datos import cargar_datos
+import os
+
+def cls():
+    os.system('cls' if os.name == 'nt' else 'clear') 
+
+def pausar():
+    input("\nPresione ENTER para continuar...")
 
 def menu_principal():
     biblioteca = Biblioteca()
+    cargar_datos(biblioteca)
     
-   
-    biblioteca.agregar_material(Libro("El Aleph", "Jorge Luis Borges", "2005"))
-    biblioteca.agregar_material(Revista("National Geographic", 520, "2005"))
-    biblioteca.agregar_socio(Socio("Juan Pérez"))
-
     while True:
-        print("\n" )
-        print(" ⚔️BIBLIOTECA⚔️ ")
-        print("\n" )
-        print("1| Agregar Libro o Revista")
-        print("2| Agregar Socio")
-        print("3| Ver Inventario")
-        print("4| Realizar Préstamo")
-        print("5| Realizar Devolucion")
-        print("6| Consultar Préstamos")
-        print("7| Ver Socios")
-        print("8| Ver Socios Habilitados")
-        print("0| Salir")
+        cls()
+        print("=======================================")
+        print("          SISTEMA BIBLIOTECA           ")
+        print("=======================================")
+        print("  1 | Agregar Libro o Revista")
+        print("  2 | Agregar Socio")
+        print("  3 | Ver Inventario")
+        print("  4 | Prestamo o Devolución")
+        print("  5 | Consultar Historial de Préstamos")
+        print("  6 | Gestión de Socios")
+        print("  0 | Salir")
+        print("=======================================")
         
-        
-        opcion = input("Seleccione una opción: ")
+        opcion = input("Seleccione una opción: ").strip()
 
         if opcion == "1":
-            tipo = input("(1: Libro / 2: Revista): ")
-            titulo = input("Título: ")
-            if tipo == "1":
-                autor = input("Autor: ")
-                año = int(input( "Año: "))
-                biblioteca.agregar_material(Libro(titulo, autor, año))
-                print("\n" )
-                print( "Libro agregado.")
-            elif tipo == "2":
-                edicion = int(input("Número de edición: "))
-                año = int(input( "Año: "))
-                biblioteca.agregar_material(Revista(titulo, edicion, año))
-                print("\n" )
-                print("Revista agregada.")
+            cls()
+            print("    AGREGAR NUEVO MATERIAL    ")
+            print("1 | Libro")
+            print("2 | Revista")
+            tipo = input("Seleccione tipo: ").strip()
+            
+            if tipo == "1" or tipo == "2":
+                cls()
+                titulo = input("Título: ").strip()
+                
+                if tipo == "1":
+                    autor = input("Autor: ").strip()
+                    año = int(input("Año de publicación: "))
+                    nuevo = Libro(titulo, autor, año)
+                else:
+                    edicion = int(input("Número de edición: "))
+                    año = int(input("Año: "))
+                    nuevo = Revista(titulo, edicion, año)
+                
+                es_nuevo = biblioteca.agregar_material(nuevo)
+                print("\n---------------------------------------")
+                if es_nuevo:
+                    print(f" Nuevo material registrado:\n    '{titulo}'")
+                else:
+                    print(f" Se sumó 1 unidad a:\n    '{titulo}'")
+                print("---------------------------------------")
             else:
-                print("\n" )
-                print("Opción inválida.")
-
+                print("\n  Opción inválida.")
+            pausar()
+        
         elif opcion == "2":
-            nom = input("Nombre y Apellido: ")
-            biblioteca.agregar_socio(Socio(nom))
-            print("\n" )
-            print("Socio agregado")
-
+            cls()
+            print("    REGISTRAR NUEVO SOCIO    \n")
+            nom = input("Nombre y Apellido: ").strip()
+            dni = "" 
+            while len(dni) != 8 or not dni.isdigit():
+                dni = input("Introduce el DNI (8 números exactos): ").strip()
+                if len(dni) >= 8:
+                    dni = dni[0:8]
+            
+            biblioteca.agregar_socio(Socio(nom, dni))
+            print("\n---------------------------------------")
+            print(f"  Socio '{nom}' registrado correctamente.")
+            print("---------------------------------------")
+            pausar()
+    
         elif opcion == "3":
-            biblioteca.mostrar_inventario()
-
+            cls()
+            print("    INVENTARIO ")
+            print("1 | Ver Libros")
+            print("2 | Ver Revistas")
+            print("3 | Ver Todo")
+            a = input("Seleccione opción: ").strip()
+            cls()
+            
+            if a == "1" or a == "3":
+                print("\n    LIBROS    ")
+                encontro = False
+                for l in biblioteca.inventario:
+                    if l.id_material[0] == "L":
+                        print(f"  {l}")
+                        encontro = True
+                if not encontro: 
+                    print("  No hay libros registrados.")
+            
+            if a == "2" or a == "3":
+                print("\n     REVISTAS    ")
+                encontro = False
+                for r in biblioteca.inventario:
+                    if r.id_material[0] == "R":
+                        print(f"  {r}")
+                        encontro = True
+                if not encontro: 
+                    print("  No hay revistas registradas.")
+            pausar()
+                
         elif opcion == "4":
-            socio_id = input("ID numérico del socio (Ej: 1): ")
-            mat_cod = input("ID numérico del material (Ej: 1): ")
-            biblioteca.realizar_prestamo(socio_id, mat_cod)
-            print("\n" )
-            print("Prestamo realizado")
-
+            cls()
+            print("    GESTIÓN DE PRESTAMOS Y DEVOLUCIONES    ")
+            print("1 | Realizar Prestamo")
+            print("2 | Realizar Devolucion")
+            a = input("Seleccione una opción: ").strip()
+            
+            if a == "1":
+                cls()
+                biblioteca.mostrar_socios()
+                socio_id = input("Ingrese el ID del socio: ").strip()
+                cls()
+                
+                biblioteca.mostrar_inventario()
+                mat_cod = input("Ingrese el ID del material (Ej: L1 o L-1): ").strip().upper()
+                
+                if len(mat_cod) >= 2 and "-" not in mat_cod:
+                    mat_cod = f"{mat_cod[0]}-{mat_cod[1:]}"
+                
+                if biblioteca.realizar_prestamo(socio_id, mat_cod):
+                    print("\n---------------------------------------")
+                    print("  Prestamo realizado con exito")
+                    print("---------------------------------------")
+                pausar()
+            
+            elif a == "2":
+                cls()
+                biblioteca.mostrar_prestamos_activos()
+                socio_id = input("Ingrese el ID del socio que devuelve: ").strip()
+                
+                mat_cod = input("ID del material a devolver (Ej: L1 o L-1): ").strip().upper()
+                
+                if len(mat_cod) >= 2 and "-" not in mat_cod:
+                    mat_cod = f"{mat_cod[0]}-{mat_cod[1:]}"
+                
+                if biblioteca.realizar_devolucion(socio_id, mat_cod):
+                    print("\n---------------------------------------")
+                    print("  Devolución procesada con exito \n    El stock ha sido actualizado.")
+                    print("---------------------------------------")
+                pausar()
+            else:
+                print("\n  Opción inválida.")
+                pausar()
+        
         elif opcion == "5":
-            mat_cod = input("ID numérico del material a devolver (Ej: 1): ")
-            biblioteca.realizar_devolucion(mat_cod)
-            print("\n" )
-            print("Devolucion realizada")
+            cls()
+            print("    CONSULTA DE HISTORIAL    ")
+            print("1 | Ver Préstamos Activos")
+            print("2 | Ver Préstamos Vencidos")
+            print("3 | Total")
+            a = input("Seleccione una opción: ").strip()
+            cls()
+            
+            print(f"DEBUG: Tenés {len(biblioteca.prestamos)} préstamos guardados.")
+            print("-" * 30)
+
+            if a == "1" or a == "3":
+                print("    PRÉSTAMOS ACTIVOS VIGENTES    \n")
+                for p in biblioteca.prestamos: 
+                    if p.activo and not p.vencido():
+                        print(f"  {p}")
+                    
+            if a == "2" or a == "3":
+                print("     PRÉSTAMOS VENCIDOS    \n")
+                for p in biblioteca.prestamos:
+                    if p.vencido():
+                        print(f"  {p}")
+
+            pausar()
 
         elif opcion == "6":
-            biblioteca.mostrar_prestamos_activos()
-
-        elif opcion == "7":
+            cls()
+            print("    GESTIÓN DE ESTADO DE SOCIOS    ")
             biblioteca.mostrar_socios()
-
-        elif opcion == "8":
-            biblioteca.mostrar_habilitados()
+            print("\n")
+            print("1 | Habilitar Socio")
+            print("2 | Deshabilitar Socio")
+            a = input("Seleccione una opción: ").strip()
+            
+            if a == "1" or a == "2":
+                id_buscado = input("Ingrese el ID del socio a modificar: ").strip()
+                alta = True if a == "1" else False
+                socio_modificado = biblioteca.estado_socio(id_buscado, alta)
+                cls()
+                print("\n---------------------------------------")
+                if socio_modificado:
+                    estado_str = "HABILITADO" if alta else "SUSPENDIDO"
+                    print(f"  ¡Cambio Guardado!\n    Socio: {socio_modificado.nombre}\n    Estado: {estado_str}")
+                else:
+                    print("  Error: No se encontró ningún socio con ese ID.")
+                print("---------------------------------------")
+            else:
+                print("\n  Opción inválida.")
+            pausar()
 
         elif opcion == "0":
-            print("Chau Crack")
+            cls()
+            print("\n=======================================")
+            print("            ¡Chau Crack!     ")
+            print("=======================================\n")
             break
         else:
-            print("Opción no válida. Intente nuevamente.")
+            print("\n  Opción no valida. Intente nuevamente.")
+            pausar()
 
 if __name__ == "__main__":
     menu_principal()
