@@ -16,9 +16,7 @@ def menu_principal():
     
     while True:
         cls()
-        print("/n")
-        print("          SISTEMA BIBLIOTECA           ")
-        print("/n")
+        print("/n         SISTEMA BIBLIOTECA           /n")
         print("  1 | Agregar Libro o Revista")
         print("  2 | Agregar Socio")
         print("  3 | Ver Inventario")
