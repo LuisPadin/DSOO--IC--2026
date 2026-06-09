@@ -12,6 +12,6 @@ class Socio:
             estado = "Habilitado"
         else:
             estado = "Suspendido"
-        return "ID Socio: " + self.id_socio + " | Nombre: " + self.nombre + " | Estado: " + estado
+        return f"ID Socio: {self.id_socio} | Nombre: {self.nombre} | Estado: {estado}"
 
 
