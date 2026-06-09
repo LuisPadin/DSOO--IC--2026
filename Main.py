@@ -25,7 +25,7 @@ def menu_principal():
         print("  6 | Gestión de Socios")
         print("  0 | Salir")
         print("")
-        
+        print("=======================================")
         opcion = input("Seleccione una opción: ").strip()
         if opcion == "1":
             cls()
@@ -39,15 +39,16 @@ def menu_principal():
                 cls()
                 try:
                     titulo = input("Título: ").strip()
-                    
+                    editorial = input("Editorial: ").strip()
                     if tipo == "1":
                         autor = input("Autor: ").strip()
                         año = int(input("Año de publicación: "))
-                        nuevo = Libro(titulo, autor, año)
+                        nuevo = Libro(titulo, autor, editorial, año)
                     else:
+                        editorial = editorial = input("Editorial: ").strip()
                         edicion = int(input("Número de edición: "))
                         año = int(input("Año: "))
-                        nuevo = Revista(titulo, edicion, año)
+                        nuevo = Revista(titulo, edicion, editorial, año)
                     
                     es_nuevo = biblioteca.agregar_material(nuevo)
                     print("\n---------------------------------------")
