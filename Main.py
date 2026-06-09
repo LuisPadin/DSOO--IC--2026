@@ -16,9 +16,9 @@ def menu_principal():
     
     while True:
         cls()
-        print("=======================================")
+        print("/n")
         print("          SISTEMA BIBLIOTECA           ")
-        print("=======================================")
+        print("/n")
         print("  1 | Agregar Libro o Revista")
         print("  2 | Agregar Socio")
         print("  3 | Ver Inventario")
@@ -143,9 +143,9 @@ def menu_principal():
                     mat_cod = f"{mat_cod[0]}-{mat_cod[1:]}"
                 
                 if biblioteca.realizar_devolucion(socio_id, mat_cod):
-                    print("\n---------------------------------------")
+                    print("\n")
                     print("  Devolución procesada con exito \n    El stock ha sido actualizado.")
-                    print("---------------------------------------")
+                    print("/n")
                 pausar()
             else:
                 print("\n  Opción inválida.")
@@ -154,23 +154,21 @@ def menu_principal():
         elif opcion == "5":
             cls()
             print("    CONSULTA DE HISTORIAL    ")
+            print("/n")
             print("1 | Ver Préstamos Activos")
             print("2 | Ver Préstamos Vencidos")
             print("3 | Total")
             a = input("Seleccione una opción: ").strip()
             cls()
             
-            print(f"DEBUG: Tenés {len(biblioteca.prestamos)} préstamos guardados.")
-            print("-" * 30)
-
             if a == "1" or a == "3":
-                print("    PRÉSTAMOS ACTIVOS VIGENTES    \n")
+                print("    PRESTAMOS ACTIVOS VIGENTES    \n")
                 for p in biblioteca.prestamos: 
                     if p.activo and not p.vencido():
                         print(f"  {p}")
                     
             if a == "2" or a == "3":
-                print("     PRÉSTAMOS VENCIDOS    \n")
+                print("     PRESTAMOS VENCIDOS    \n")
                 for p in biblioteca.prestamos:
                     if p.vencido():
                         print(f"  {p}")
@@ -191,22 +189,22 @@ def menu_principal():
                 alta = True if a == "1" else False
                 socio_modificado = biblioteca.estado_socio(id_buscado, alta)
                 cls()
-                print("\n---------------------------------------")
+                print("\n")
                 if socio_modificado:
                     estado_str = "HABILITADO" if alta else "SUSPENDIDO"
                     print(f"  ¡Cambio Guardado!\n    Socio: {socio_modificado.nombre}\n    Estado: {estado_str}")
                 else:
-                    print("  Error: No se encontró ningún socio con ese ID.")
-                print("---------------------------------------")
+                    print(" No se encontró ningún socio con ese ID.")
+                print("")
             else:
                 print("\n  Opción inválida.")
             pausar()
 
         elif opcion == "0":
             cls()
-            print("\n=======================================")
+            print("\n")
             print("            ¡Chau Crack!     ")
-            print("=======================================\n")
+            print("\n")
             break
         else:
             print("\n  Opción no valida. Intente nuevamente.")
