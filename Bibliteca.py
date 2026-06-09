@@ -7,17 +7,19 @@ class Biblioteca:
         self.prestamos = []     
 
     def agregar_material(self, material):
+        for item in self.inventario:
+            if item.titulo == material.titulo:
+                item.stock = item.stock + 1
+                return False
         self.inventario.append(material)
+        return True
 
     def mostrar_inventario(self):
-        print("\n--- Inventario ---")
-        
-        
+        print("\n     INVENTARIO      ")
         for material in self.inventario:
             if material.id_material[0] == "L":
                 print(material)
             
-        
         for material in self.inventario:
             if material.id_material[0] == "R":
                 print(material)
@@ -26,14 +28,14 @@ class Biblioteca:
         self.socios.append(socio)
 
     def mostrar_socios(self):
-        print("\n--- Listado de Socios ---")
+        print("\n    LISTADO DE SOCIOS    ")
         if len(self.socios) == 0:
             print("No hay socios registrados.")
         for s in self.socios:
             print(s)
 
     def mostrar_habilitados(self):
-        print("\n--- Socios Habilitados ---")
+        print("\n    SOCIOS HABILITADOS    ")
         hay_habilitados = False
         for s in self.socios:
             if s.habilitado:
@@ -41,6 +43,14 @@ class Biblioteca:
                 hay_habilitados = True
         if not hay_habilitados:
             print("No hay socios habilitados en este momento.")
+    
+    def estado_socio(self, id_socio, alta):
+        id_buscado_str = str(id_socio).strip()
+        for s in self.socios:
+            if str(s.id_socio).strip() == id_buscado_str:
+                s.habilitado = alta
+                return s  
+        return None  
 
     def realizar_prestamo(self, id_socio, id_material):
         socio_encontrado = None
@@ -50,38 +60,33 @@ class Biblioteca:
                 break
 
         if socio_encontrado == None:
-            print("Socio no encontrado.")
-            return
+            return False
 
         if socio_encontrado.habilitado == False:
-            print("El socio no está habilitado.")
-            return
+            return False
 
         for item in self.inventario:
             if item.id_material == id_material:
-                if item.disponible:
+                if item.stock > 0:
                     nuevo_prestamo = Prestamo(socio_encontrado, item)
                     self.prestamos.append(nuevo_prestamo)
-                    print("Material prestado correctamente.")
+                    return True
                 else:
-                    print("El material no está disponible.")
-                return
-        print("Material no encontrado.")
+                    return False
+        return False
 
-    def realizar_devolucion(self, id_material):
+    def realizar_devolucion(self, id_socio, id_material):
+        id_socio_str = str(id_socio).strip()
         for p in self.prestamos:
-            if p.material.id_material == id_material and p.activo:
-                p.finalizar()
-                self.prestamos.remove(p)  
-                print("El material ha sido devuelto.")
-                return
-        print("No se encontró un préstamo activo para ese código.")
+            if p.material.id_material == id_material and str(p.socio.id_socio).strip() == id_socio_str and p.activo:
+                p.finalizar()  
+                return True
+        return False
 
     def mostrar_prestamos_activos(self):
-        print("\n--- Préstamos Activos ---")
+        print("\n    PRESTAMOS ACTIVOS    ")
         if len(self.prestamos) == 0:
             print("No hay préstamos activos.")
         for p in self.prestamos:
-            print(p)
-
-
+            if p.activo:
+                print(p)
