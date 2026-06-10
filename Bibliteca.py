@@ -63,15 +63,22 @@ class Biblioteca:
                 if item.disponible:
                     nuevo_prestamo = Prestamo(socio_encontrado, item)
                     self.prestamos.append(nuevo_prestamo)
+                    print("\n")
+                    print("Préstamo realizado con éxito")
                     return True
                 else:
+                    print("\n")
+                    print("El material no está disponible")
                     return False
+        print("\n")
+        print("Material no encontrado en el inventario")
         return False
-
+        
     def realizar_devolucion(self, id_socio, id_material):
         id_socio_str = str(id_socio).strip()
         for p in self.prestamos:
             if p.material.id_material == id_material and str(p.socio.id_socio).strip() == id_socio_str and p.activo:
+                print("\n")
                 p.finalizar()  
                 return True
         return False
