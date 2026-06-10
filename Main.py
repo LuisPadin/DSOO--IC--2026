@@ -39,31 +39,26 @@ def menu_principal():
                 cls()
                 try:
                     titulo = input("Título: ").strip()
-                    editorial = input("Editorial: ").strip()
                     if tipo == "1":
                         autor = input("Autor: ").strip()
+                        editorial = input("Editorial: ").strip()
                         año = int(input("Año de publicación: "))
-                        nuevo = Libro(titulo, autor, editorial, año)
+                        nuevo = Libro(titulo, editorial, autor, año)
                     else:
-                        editorial = editorial = input("Editorial: ").strip()
                         edicion = int(input("Número de edición: "))
-                        año = int(input("Año: "))
-                        nuevo = Revista(titulo, edicion, editorial, año)
+                        editorial = input("Editorial: ").strip() 
+                        año = int(input("Año de publicación: "))
+                        nuevo = Revista(titulo, editorial, edicion, año)
                     
                     es_nuevo = biblioteca.agregar_material(nuevo)
-                    print("\n---------------------------------------")
+                    print("\n")
                     if es_nuevo:
                         print(f" Nuevo material registrado:\n    '{titulo}'")
-                    else:
-                        print(f" Se sumó 1 unidad a:\n    '{titulo}'")
                     print("---------------------------------------")
                     
                 except ValueError:
-                    print("\n Dejo un campo vacio.")
-                    
-            else:
-                print("\n  Opción inválida.")
-            pausar()
+                    print("\n Dejo un campo vacio o el año/edición no es un número válido.")
+                pausar() 
                 
         elif opcion == "2":
             cls()
@@ -84,7 +79,7 @@ def menu_principal():
             print("1 | Ver Libros")
             print("2 | Ver Revistas")
             print("3 | Ver Todo")
-            print("")
+            print("=======================================")
             a = input("Seleccione opción: ").strip()
             cls()
             
@@ -114,7 +109,7 @@ def menu_principal():
             print("    GESTIÓN DE PRESTAMOS Y DEVOLUCIONES    \n")
             print("1 | Realizar Prestamo")
             print("2 | Realizar Devolucion")
-            print("")
+            print("=======================================")
             a = input("Seleccione una opción: ").strip()
             
             if a == "1":
@@ -122,8 +117,8 @@ def menu_principal():
                 biblioteca.mostrar_socios()
                 socio_id = input("Ingrese el ID del socio: ").strip()
                 cls()
-                
                 biblioteca.mostrar_inventario()
+
                 print("")
                 mat_cod = input("Ingrese el ID del material (Ej: L1 o L-1): ").strip().upper()
                 
@@ -144,6 +139,7 @@ def menu_principal():
                     mat_cod = f"{mat_cod[0]}-{mat_cod[1:]}"
                 
                 biblioteca.realizar_devolucion(socio_id, mat_cod)
+                
                 pausar()
             else:
                 print("\n  Opción inválida.")
@@ -155,7 +151,7 @@ def menu_principal():
             print("1 | Ver Préstamos Activos")
             print("2 | Ver Préstamos Vencidos")
             print("3 | Total")
-            print("")
+            print("=======================================")
             a = input("Seleccione una opción: ").strip()
             cls()
             
@@ -179,7 +175,7 @@ def menu_principal():
             print("\n")
             print("1 | Habilitar Socio")
             print("2 | Deshabilitar Socio")
-            print("")
+            print("=======================================")
             a = input("Seleccione una opción: ").strip()
             
             if a == "1" or a == "2":
@@ -208,4 +204,5 @@ def menu_principal():
             pausar()
 
 if __name__ == "__main__":
+    menu_principal()
     menu_principal()
